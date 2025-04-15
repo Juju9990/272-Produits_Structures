@@ -3,7 +3,9 @@ import streamlit as st
 st.title("📊 Sélection d'un instrument financier")
 
 # Choix du type d'instrument
-instrument_type = st.selectbox("Instrument :", ["Option", "Obligation ZC", "Swap"])
+instrument_type = st.selectbox(
+    "Instrument :", ["Option", "Obligation ZC", "Swap", "Autocall Athena"]
+)
 
 if instrument_type == "Option":
     option_type = st.selectbox("Type d'option :", ["Call", "Put"])
@@ -56,32 +58,57 @@ elif instrument_type == "Swap":
     T = st.number_input("Maturité (en années)", min_value=0.0, format="%.2f")
     st.markdown("## Jambe payeuse")
     jambe_payeuse = st.selectbox(
-        "Caractéristique de la jambe payeuse:", ["Taux fixe", "Taux variable"]
+        "Caractéristique de la jambe payeuse:",
+        ["Taux payeur fixe", "Taux payeur variable"],
     )
 
-    if jambe_payeuse == "Taux fixe":
-        taux = st.number_input("Taux fixe", min_value=0.0, format="%.2f")
-        frequence = st.selectbox(
-            "Fréquence de paiement :", ["Annuel", "Semestriel", "Trimestriel"]
+    if jambe_payeuse == "Taux payeur fixe":
+        taux_payeur = st.number_input("Taux fixe payeur", min_value=0.0, format="%.2f")
+        frequence_payeur = st.selectbox(
+            "Fréquence de paiement payeur :", ["Annuel", "Semestriel", "Trimestriel"]
         )
-    if jambe_payeuse == "Taux variable":
-        taux = st.selectbox("Index de référence :", ["Euribor 3M"])
-        frequence = st.selectbox(
-            "Fréquence de paiement :", ["Annuel", "Semestriel", "Trimestriel"]
+    if jambe_payeuse == "Taux payeur variable":
+        taux_payeur = st.selectbox("Index de référence :", ["Euribor 3M"])
+        frequence_payeur = st.selectbox(
+            "Fréquence de paiement payeur :", ["Annuel", "Semestriel", "Trimestriel"]
         )
 
     st.markdown("## Jambe receveuse")
     jambe_receveuse = st.selectbox(
-        "Caractéristique de la jambe receveuse:", ["Taux fixe", "Taux variable"]
+        "Caractéristique de la jambe receveuse:",
+        ["Taux receveur fixe", "Taux receveur variable"],
     )
 
-    if jambe_receveuse == "Taux fixe":
-        taux = st.number_input("Taux fixe", min_value=0.0, format="%.2f")
-        frequence = st.selectbox(
-            "Fréquence de paiement :", ["Annuel", "Semestriel", "Trimestriel"]
+    if jambe_receveuse == "Taux receveur fixe":
+        taux_receveur = st.number_input(
+            "Taux fixe receveur", min_value=0.0, format="%.2f"
         )
-    if jambe_receveuse == "Taux variable":
-        taux = st.selectbox("Index de référence :", ["Euribor 3M"])
-        frequence = st.selectbox(
-            "Fréquence de paiement :", ["Annuel", "Semestriel", "Trimestriel"]
+        frequence_receveur = st.selectbox(
+            "Fréquence de paiement receveur :", ["Annuel", "Semestriel", "Trimestriel"]
         )
+    if jambe_receveuse == "Taux receveur variable":
+        taux_receveur = st.selectbox("Index de référence :", ["Euribor 3M"])
+        frequence_receveur = st.selectbox(
+            "Fréquence de paiement receveur:", ["Annuel", "Semestriel", "Trimestriel"]
+        )
+    if st.button("📈 Calculer le prix du swap"):
+        st.success(f"💰 Prix unitaire : 100 €")
+
+if instrument_type == "Autocall Athena":
+    # Autocall Athena (Sous-Jacent, Barrière Autocall, Coupon, Maturité, Fixing (Fréquence d'observation)
+    st.markdown("## Généralités")
+    N = st.number_input("Nominal (N)", min_value=0.0, format="%.2f")
+    T = st.number_input("Maturité (en années)", min_value=0.0, format="%.2f")
+    K = st.number_input("Strike (K)", min_value=0.0, format="%.2f")
+    coupon = st.number_input("Coupon", min_value=0.0, format="%.2f")
+    barriere_autocall = st.number_input(
+        "Barrière Autocall", min_value=0.0, format="%.2f"
+    )
+    fixing = st.selectbox(
+        "Fixing (Fréquence d'observation) :", ["Annuel", "Semestriel", "Trimestriel"]
+    )
+    PDI = st.number_input("PDI", min_value=0.0, format="%.2f")
+    # Sous-jacent
+    sous_jacent = st.selectbox("Sous-jacent :", ["S&P 500", "EURO STOXX 50"])
+    if st.button("📈 Calculer le prix de l'autocall"):
+        st.success(f"💰 Prix unitaire : 100 €")
