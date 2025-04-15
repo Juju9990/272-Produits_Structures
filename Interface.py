@@ -3,7 +3,7 @@ from tkinter import ttk
 from tkinter import messagebox
 from tkcalendar import DateEntry  # Installer avec : pip install tkcalendar
 import datetime
-
+import numpy  as np
 class PricerGUI(tk.Tk):
     def __init__(self):
         super().__init__()
