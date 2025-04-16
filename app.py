@@ -134,6 +134,7 @@ if instrument_type == "Option digital":
         st.subheader(f"Paramètres de l'option {option_digital}")
         K = st.number_input("Strike (K)", min_value=0.0, format="%.2f")
         N = st.number_input("Nominal (N)", min_value=0.0, format="%.2f")
+        # start_date = st.date_input("Date de début")
         T = st.number_input("Maturité (en années)", min_value=0.0, format="%.2f")
         sous_jacent = st.selectbox("Sous-jacent :", ["S&P 500", "EURO STOXX 50"])
         coupon = st.number_input("Coupon p.a.", min_value=0.0, format="%.2f")
