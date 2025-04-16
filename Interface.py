@@ -181,3 +181,9 @@ class PricerGUI(tk.Tk):
 if __name__ == "__main__":
     app = PricerGUI()
     app.mainloop()
+
+
+
+
+
+# 123456789
