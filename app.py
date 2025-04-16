@@ -27,7 +27,7 @@ if instrument_type == "Option":
         N = st.number_input("Nominal (N)", min_value=0.0, format="%.2f")
         T = st.number_input("Maturité (en années)", min_value=0.0, format="%.2f")
         quantity = st.number_input("Quantité", min_value=1, step=1)
-
+        fixing = None
         st.markdown("### 📋 Résumé de votre saisie")
         st.write(f"Instrument : **Option {option_type}**")
         st.write(f"Sous-jacent : **{underlying}**")
