@@ -4,7 +4,15 @@ st.title("📊 Sélection d'un instrument financier")
 
 # Choix du type d'instrument
 instrument_type = st.selectbox(
-    "Instrument :", ["Option", "Obligation ZC", "Swap", "Autocall Athena"]
+    "Instrument :",
+    [
+        "Option",
+        "Obligation ZC",
+        "Swap",
+        "Autocall Athena",
+        "Option digital",
+        "Stratégie",
+    ],
 )
 
 if instrument_type == "Option":
@@ -12,14 +20,12 @@ if instrument_type == "Option":
 
     if option_type:
         st.subheader(f"Paramètres de l'option {option_type}")
-        underlying = st.selectbox(
-            "Sous-jacent :", ["S&P 500", "EURO STOXX 50", "Euribor 3M"]
-        )
+        underlying = st.selectbox("Sous-jacent :", ["LVMH", "Thales", "Euribor 3M"])
         K = st.number_input("Strike (K)", min_value=0.0, format="%.2f")
         N = st.number_input("Nominal (N)", min_value=0.0, format="%.2f")
         T = st.number_input("Maturité (en années)", min_value=0.0, format="%.2f")
         quantity = st.number_input("Quantité", min_value=1, step=1)
-
+        fixing = None
         st.markdown("### 📋 Résumé de votre saisie")
         st.write(f"Instrument : **Option {option_type}**")
         st.write(f"Sous-jacent : **{underlying}**")
@@ -36,9 +42,10 @@ if instrument_type == "Option":
 
 elif instrument_type == "Obligation ZC":
     st.subheader("Paramètres de l'obligation Zéro-Coupon")
-
+    emetteur = st.selectbox("Émetteur :", ["Total", "LVMH", "Airbus"])
     taux_type = st.selectbox("Type de taux :", ["Taux fixe", "Taux variable"])
     if taux_type == "Taux fixe":
+        fixing = None
         N = st.number_input("Nominal (N)", min_value=0.0, format="%.2f")
         T = st.number_input("Maturité (en années)", min_value=0.0, format="%.2f")
         taux_coupon = st.number_input(
@@ -107,8 +114,71 @@ if instrument_type == "Autocall Athena":
     fixing = st.selectbox(
         "Fixing (Fréquence d'observation) :", ["Annuel", "Semestriel", "Trimestriel"]
     )
-    PDI = st.number_input("PDI", min_value=0.0, format="%.2f")
+    risque_capital = st.selectbox("Risque en capital : ", ["Oui", "Non"])
+    if risque_capital == "Oui":
+        PDI_Strike = st.number_input(
+            "Strike du PDI", min_value=0.0, format="%.2f", value=100.0
+        )
+        PDI_barriere = st.number_input("Barrière du PDI", min_value=0.0, format="%.2f")
     # Sous-jacent
-    sous_jacent = st.selectbox("Sous-jacent :", ["S&P 500", "EURO STOXX 50"])
+    sous_jacent = st.selectbox("Sous-jacent :", ["LVMH", "Thales"])
     if st.button("📈 Calculer le prix de l'autocall"):
         st.success(f"💰 Prix unitaire : 100 €")
+
+if instrument_type == "Option digital":
+    option_digital = st.selectbox(
+        "Type d'option digital :", ["Call digital", "Put digital"]
+    )
+    if option_digital:
+        st.subheader(f"Paramètres de l'option {option_digital}")
+        K = st.number_input("Strike (K)", min_value=0.0, format="%.2f")
+        N = st.number_input("Nominal (N)", min_value=0.0, format="%.2f")
+        # start_date = st.date_input("Date de début")
+        T = st.number_input("Maturité (en années)", min_value=0.0, format="%.2f")
+        sous_jacent = st.selectbox("Sous-jacent :", ["LVMH", "Thales"])
+        fixing = None
+        coupon = st.number_input("Coupon p.a.", min_value=0.0, format="%.2f")
+
+if instrument_type == "Stratégie":
+    instrument_type_bis = st.selectbox(
+        "Stratégie :", ["Obligation convertible", "Tunnel", "Straddle"]
+    )
+    if instrument_type_bis == "Obligation convertible":
+        st.markdown("## Partie obligataire")
+        N = st.number_input("Nominal (N)", min_value=0.0, format="%.2f")
+        T = st.number_input("Maturité (en années)", min_value=0.0, format="%.2f")
+        coupon = st.number_input("Coupon", min_value=0.0, format="%.2f")
+        frequence_OC = st.selectbox(
+            "Fréquence de paiement :", ["Annuel", "Semestriel", "Trimestriel"]
+        )
+        st.markdown("## Partie optionnelle")
+        fixing = None
+        K = st.number_input("Strike (K)", min_value=0.0, format="%.2f")
+        sous_jacent = st.selectbox("Sous-jacent :", ["Total", "LVMH", "Airbus"])
+        conversion_ratio = st.number_input(
+            "Ratio de conversion", min_value=0.0, format="%.2f"
+        )
+        if st.button("📈 Calculer le prix de l'obligation convertible"):
+            st.success(f"💰 Prix unitaire : 100 €")
+
+    if instrument_type_bis == "Tunnel":
+        st.markdown("## Généralités")
+        fixing = None
+        N = st.number_input("Nominal (N)", min_value=0.0, format="%.2f")
+        T = st.number_input("Maturité (en années)", min_value=0.0, format="%.2f")
+        sous_jacent = st.selectbox("Sous-jacent :", ["Euribor 3M"])
+        st.markdown("## Partie Call")
+        K1 = st.number_input("Strike 1 (K1)", min_value=0.0, format="%.2f")
+        st.markdown("## Partie Put")
+        K2 = st.number_input("Strike 2 (K2)", min_value=0.0, format="%.2f")
+        if st.button("📈 Calcul"):
+            st.success(f"💰 Prix unitaire : 100 €")
+
+    if instrument_type_bis == "Straddle":
+        st.markdown("## Généralités")
+        fixing = None
+        N = st.number_input("Nominal (N)", min_value=0.0, format="%.2f")
+        T = st.number_input("Maturité (en années)", min_value=0.0, format="%.2f")
+        sous_jacent = st.selectbox("Sous-jacent :", ["LVMH", "Thales"])
+        if st.button("📈 Calcul"):
+            st.success(f"💰 Prix unitaire : 100 €")
