@@ -40,6 +40,8 @@ if instrument_type == "Option":
             else:
                 st.error("Tous les champs doivent être remplis correctement.")
 
+        
+
 elif instrument_type == "Obligation ZC":
     st.subheader("Paramètres de l'obligation Zéro-Coupon")
     emetteur = st.selectbox("Émetteur :", ["Total", "LVMH", "Airbus"])
