@@ -1,4 +1,5 @@
 import streamlit as st
+from smile_vol import load_and_prepare_data, display_vol_surface
 
 st.title("📊 Sélection d'un instrument financier")
 
@@ -19,6 +20,10 @@ if instrument_type == "Option":
     option_type = st.selectbox("Type d'option :", ["Call", "Put"])
 
     if option_type:
+        if st.button("📈 Afficher le smile de volatilité"):
+            df, today = load_and_prepare_data(option_type.lower(), "2025-04-16")
+            vol_image = display_vol_surface(df, today, option_type.lower())
+            st.image(vol_image, caption=f"Surface de volatilité implicite - {option_type}")
         st.subheader(f"Paramètres de l'option {option_type}")
         underlying = st.selectbox("Sous-jacent :", ["LVMH", "Thales", "Euribor 3M"])
         K = st.number_input("Strike (K)", min_value=0.0, format="%.2f")
