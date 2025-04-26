@@ -6,7 +6,7 @@ import numpy as np
 import yfinance as yf
 
 
-class Call_Digit(Produit):
+class Put_Digit(Produit):
     def __init__(
         self,
         nominal: str,
@@ -48,7 +48,7 @@ class Call_Digit(Produit):
 
     def Payoff(self, ST) -> float:
         """Calcule le payoff du produit à maturité"""
-        if ST >= self.__K:
+        if ST <= self.__K:
             return self.__coupon * self.get_nominal()
         else:
             return 0
@@ -72,7 +72,7 @@ class Call_Digit(Produit):
                     self.__echeancier_simulation[j],
                     self.__echeancier_simulation,
                     self.__smile,
-                    "call",
+                    "put",
                     self.__div,
                     self.get_maturite(),
                 )
