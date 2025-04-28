@@ -15,10 +15,11 @@ from obligation_ZC import ObligationZC
 from swap import Swap
 from autocall import Autocall
 
+
 # generer_smile("Apple")
 # print("Done")
 
-mat = Maturite(1, None)
+mat = Maturite(2, "Trimestriel")
 mat.ExpiryDate()
 mat.CreationEcheancier_simulation()
 echeancier_simulation = mat.get_echeancier_simulation()
@@ -32,7 +33,7 @@ tx.Courbe_TauxFWD_entre_2_simu()
 ZC = tx.get_ZC()
 Fwd = tx.get_Fwd_simu()
 
-
+"""
 V_Call = Volatilite(echeancier_simulation, "call")
 V_Call.smile()
 V_Call.smile_Fwd_a_matu()
@@ -95,7 +96,7 @@ print(
         price_put,
     )
 )
-"""
+
 #####  STRADDLE  ####
 mon_straddle = Straddle(100000, 2, None, "Apple", echeancier_simulation, echeancier_fixing, smile_Call, smile_Put, Fwd, ZC)
 mon_straddle.Prix()
@@ -131,7 +132,7 @@ price_strat = mon_tunnel.get_price_strat()
 print("Le prix du Cap sur {} de strike {:.2f} est de {:.2f}€".format(mon_tunnel.get_sous_jacent(), mon_tunnel.get_strike_cap(), price_cap))
 print("Le prix du Floor sur {} de strike {:.2f} est de {:.2f}€".format(mon_tunnel.get_sous_jacent(), mon_tunnel.get_strike_floor(), price_floor))
 print("Le prix du Tunnel [Floor {:.2f}, Cap {:.2f}] sur {} est de {:.2f}€".format(mon_tunnel.get_strike_floor(), mon_tunnel.get_strike_cap(), mon_tunnel.get_sous_jacent(), price_strat))
-
+"""
 #####  OBLIGATION TAUX FIXE  ####
 mon_oblig = ObligationTxFixe(100000, 2, "Trimestriel", 0.02, echeancier_fixing)
 mon_oblig.Prix()
@@ -145,7 +146,7 @@ print(
         mon_oblig.get_prix_euro(),
     )
 )
-
+"""
 #####  OBLIGATION TAUX VARIABLE  ####
 tx_oblig = Taux()
 tx_oblig.Courbe_TauxZC_Obligation(echeancier_fixing, "Trimestriel")
