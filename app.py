@@ -629,6 +629,9 @@ if instrument_type == "Stratégie":
             price_call = mon_call.get_price()
 
             price_strat = price_euro + price_call
+            st.success(
+                "Le prix de l'obligation convertible est de {:.2f}€".format(price_strat)
+            )
 
     if instrument_type_bis == "Tunnel":
         st.markdown("## Généralités")
