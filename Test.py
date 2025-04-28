@@ -18,7 +18,7 @@ from autocall import Autocall
 # generer_smile("Apple")
 # print("Done")
 
-mat = Maturite(5, "Trimestriel")
+mat = Maturite(1, None)
 mat.ExpiryDate()
 mat.CreationEcheancier_simulation()
 echeancier_simulation = mat.get_echeancier_simulation()
@@ -32,7 +32,7 @@ tx.Courbe_TauxFWD_entre_2_simu()
 ZC = tx.get_ZC()
 Fwd = tx.get_Fwd_simu()
 
-"""
+
 V_Call = Volatilite(echeancier_simulation, "call")
 V_Call.smile()
 V_Call.smile_Fwd_a_matu()
@@ -86,6 +86,7 @@ print(
         price_call,
     )
 )
+
 print(
     "Le prix des {:.2f} Put sur {} de strike {:.2f}$ est de {:.2f}$".format(
         mon_put.get_quantity(),
@@ -94,7 +95,7 @@ print(
         price_put,
     )
 )
-
+"""
 #####  STRADDLE  ####
 mon_straddle = Straddle(100000, 2, None, "Apple", echeancier_simulation, echeancier_fixing, smile_Call, smile_Put, Fwd, ZC)
 mon_straddle.Prix()
@@ -136,7 +137,14 @@ mon_oblig = ObligationTxFixe(100000, 2, "Trimestriel", 0.02, echeancier_fixing)
 mon_oblig.Prix()
 price = mon_oblig.get_prix()
 price_euro = mon_oblig.get_prix_euro()
-print("Mon Obligation qui verse un taux de {:.2%} de manière {}, vaut {:.2%} du nominal soit {:.2f}€".format(mon_oblig.get_taux_facial(), mon_oblig.get_fixing(), mon_oblig.get_prix(), mon_oblig.get_prix_euro()))
+print(
+    "Mon Obligation qui verse un taux de {:.2%} de manière {}, vaut {:.2%} du nominal soit {:.2f}€".format(
+        mon_oblig.get_taux_facial(),
+        mon_oblig.get_fixing(),
+        mon_oblig.get_prix(),
+        mon_oblig.get_prix_euro(),
+    )
+)
 
 #####  OBLIGATION TAUX VARIABLE  ####
 tx_oblig = Taux()
@@ -166,7 +174,7 @@ mon_oblig_ZC.Prix()
 price = mon_oblig_ZC.get_prix()
 price_euro = mon_oblig_ZC.get_prix_euro()
 print("Mon Obligation ZC qui verse un taux de {:.2%} à maturité, vaut {:.2%} du nominal soit {:.2f}€".format(mon_oblig_ZC.get_taux_facial(), mon_oblig_ZC.get_prix(), mon_oblig_ZC.get_prix_euro()))
-"""
+
 ####  SWAP  ####
 tx_oblig = Taux()
 tx_oblig.Courbe_TauxZC_Obligation(echeancier_fixing, "Trimestriel")
@@ -203,3 +211,4 @@ print(
 # volatilite_loc = vol_local_square(190, echeancier_simulation[5], echeancier_simulation, smile, "call", 0.04, mat.get_T())
 # print(volatilite_loc)
 # print(vol_loc)
+"""
